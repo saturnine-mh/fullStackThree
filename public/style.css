@@ -12,6 +12,12 @@ img{
   text-decoration: line-through;
   color: black
 }
+.hide{
+  display: none;
+}
+.show{
+  display: block;
+}
 html{
 font-family: ff-chambers-sans-web,sans-serif;
 font-weight: 400;
@@ -39,6 +45,9 @@ font-style: normal;
 }
 .contentCenter{
   text-align: center;
+}
+#copyright{
+  margin-top: 18%;
 }
 
 

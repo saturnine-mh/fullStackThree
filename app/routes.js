@@ -11,11 +11,11 @@ module.exports = function(app, passport, db) {
     app.get('/profile', isLoggedIn, function(req, res) {
       console.log(req.user)
         db.collection('messages').find({user: req.user.local.email}).toArray((err, result) => {
-          let workFiltered = result.filter((task) => task.tag == 'work')
-          let fitnessFiltered = result.filter((task) => task.tag == 'fitness')
-          let mental = result.filter((task) => task.tag == 'mental-health')
-          let home = result.filter((task) => task.tag == 'home')
-          let rcWork = result.filter((task) => task.tag == 'rc-work')
+          let workFiltered = result.filter((task) => task.tag == 'javascript')
+          let fitnessFiltered = result.filter((task) => task.tag == 'HTML')
+          let mental = result.filter((task) => task.tag == 'CSS')
+          let home = result.filter((task) => task.tag == 'Node.js')
+          let rcWork = result.filter((task) => task.tag == 'Express')
 console.log(workFiltered)
           if (err) return console.log(err)
           res.render('profile.ejs', {
@@ -24,7 +24,8 @@ console.log(workFiltered)
             home,
             mental,
             fitnessFiltered,
-            rcWork
+            rcWork,
+            messages: result,
           })
         })
     });
@@ -39,9 +40,19 @@ console.log(workFiltered)
 
 // message board routes ===============================================================
 
-app.post('/dates', (req, res) => { 
+app.post('/messages', (req, res) => { 
   console.log(req.body)
-  db.collection('messages').insertOne({name:req.body.name, tag: req.body.tag, user: req.user.local.email, completed: false},
+  flipWord = req.body.palindrome.toLowerCase().split('').reverse().join('')
+  originalWord = req.body.palindrome
+  let wordCheck = ''
+  let definition = ''
+  if(flipWord == originalWord){
+    wordCheck = 'This is a palindrome!'
+  }
+  else{
+    wordCheck = 'This is not a palindrome!'
+  }
+  db.collection('messages').insertOne({palindrome:req.body.palindrome, definition: definition, wordCheck: wordCheck, user: req.user.local.email, completed: false},
   (err, result) => {
     if (err) return console.log(err)
     console.log('saved to database', result)
@@ -49,10 +60,13 @@ app.post('/dates', (req, res) => {
   })
 })
 
-app.put('/dates', (req, res) => {
-  db.collection('messages').findOneAndUpdate({name: req.body.name.trim()}, {
+app.put('/definition', (req, res) => {
+  let originalWord = req.body.palindrome
+  console.log(req.body.definition)
+  console.log('fetch')
+  db.collection('messages').findOneAndUpdate({palindrome: req.body.palindrome}, {
     $set: {
-      completed: true
+      definition: req.body.definition
     }
   }, (err, result) => {
     if (err) return res.send(err)
@@ -60,8 +74,8 @@ app.put('/dates', (req, res) => {
   })
 })
 
-    app.delete('/dates', (req, res) => {
-      db.collection('messages').findOneAndDelete({name: req.body.name.trim(),}, (err, result) => {
+    app.delete('/messages', (req, res) => {
+      db.collection('messages').findOneAndDelete({palindrome: req.body.palindrome,}, (err, result) => {
         
         if (err) return res.send(500, err)
         res.send('Message deleted!')

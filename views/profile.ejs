@@ -6,14 +6,12 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://use.typekit.net/udt8wec.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 </head>
 <body id="greyBackProfile">
 <div class="profile container">
 
-    <div class="profile page-header text-center">
-        <h1><span class="profile fa fa-anchor"></span> Profile Page</h1>
-        <a href="/logout" class="profile btn btn-default btn-sm">Logout</a>
-    </div>
+ 
 
     <div class="profile row">
 
@@ -21,112 +19,70 @@
   
         <div id="centerMain" class="profile col-sm-6">
             <div class="profile well">
-              <section id="contentMain">
-                <h3 class="contentCenter" ><span class="profile fa fa-user"></span> Local</h3>
-                <section id="localInfoSection">
-                <% if (user.local.email) { %>
-                    <p class="contentCenterLocalInfo">
-                        <h2>id:</h2> <%= user._id %><br>
-                        
-                    </p>
-                    <p class="contentCenterLocalInfo">
-                    <h2>email:</h2> <%= user.local.email %><br>
-                  </p>
-                  <p class="contentCenterLocalInfo">
-                    <h2>password:</h2> <%= user.local.password %>
-                  </p>
-
-                    <a href="/unlink/local" class="profile btn btn-default">Unlink</a>
-                <% } { %>
-                    <a href="/connect/local" class="profile btn btn-default">Connect Local</a>
-                <% } %>
-                </section>
+            
                 <section>
-                <img src="img/toDoGif.gif">
+                  <section>
+                <img src="img/homer.gif">
+                <div class="col-sm-6">
+
+                  <h1>Check your word</h1>
+                <% if (user.local.email) { %>
+                  <form action="/messages" method="POST">
+                    <input type="text" placeholder="Input Word" name="palindrome">      
+                    <button type="submit">Submit</button>
+                  </form>
+                </div>
+                <% } %>
+              </div>
+            </section>
+                <section>
+                  <div class="profile well">
+                <h1>Is it a Palindrome?</h1>
+                <ul class="messages">
+                <% for(var i=0; i<messages.length; i++) {%>
+                  <li class="message">
+                    <section>
+                    <h2><%= messages[i].palindrome %> 
+                   </h2>
+                   <section>
+                    <span><%= messages[i].definition %></span>
+                  </section>
+                  <section>
+                    <span><%= messages[i].wordCheck %></span>
+                  </section>
+                 
+                    <form method="PUT">
+                       <button class="getDef" type="button">Get Definition</button>
+                    </form>
+                    <span><i class="profile fa fa-trash-o" aria-hidden="true"></i></span>
+                    
+                  </section>
+                   
+  
+                 
+                  </li>
+                <% } %>
+                </ul>
+              </section>
+            </div>
+            
+        </div>
               </section>
 
-        <h1>To Do List</h1>
-   
-
-        <h2>Add a task to your list</h2>
-        <form action="/dates" method="POST">
-          <select name="tag">
-            <option value="home">Home</option>
-            <option value="work">Work</option>
-            <option value="rc-work">RC Work</option>
-            <option value="fitness">Fitness</option>
-            <option value="mental-health">Mental Health</option>
-          </select>
-          <input type="text" placeholder="Task" name="name" required>
-          <button type="submit">Submit</button>
-        </form>
 
 
-        <h1 id="list">List:</h1>
+            </section>
 
-          <section> 
-            <h1>Mental Health</h1> 
-            
-            <% for(let i = 0; i < mental.length; i++){%>
-              <section>
-              <span id="listItem" <%= mental[i].completed ? 'class =  strike' : 'class = notDone' %>> <%= mental[i].name %> </span> 
-              <span><i class="profile fa fa-check-circle-o" aria-hidden="true"></i></span>
-              <span><i class="profile fa fa-trash-o" aria-hidden="true"></i></span>
-            </section>
-            <% } %>
-           
-          </section>
-          <section> 
-    
-            <h1>Work</h1> 
-            <% for(let i = 0; i < workFiltered.length; i++){%>
-              <section>
-              <span id="listItem" <%= workFiltered[i].completed ? 'class =  strike' : 'class =  notDone' %>> <%= workFiltered[i].name %> </span> 
-              <span><i class="profile fa fa-check-circle-o" aria-hidden="true"></i></span>
-              <span><i class="profile fa fa-trash-o" aria-hidden="true"></i></span>
-            </section>
-            <% } %>
-            
-          </section>
-          <section> 
-            <h1>Fitness</h1> 
-            
-            <% for(let i = 0; i < fitnessFiltered.length; i++){%>
-              <section>
-              <span id="listItem" <%= fitnessFiltered[i].completed ? 'class =  strike' : 'class =  notDone' %>><%= fitnessFiltered[i].name %> </span> 
-              <span><i class="profile fa fa-check-circle-o" aria-hidden="true"></i></span>
-              <span><i class="profile fa fa-trash-o" aria-hidden="true"></i></span>
-            </section>
-            <% } %>
-          
-          </section>
-          <section> 
-            <h1>RC Work</h1> 
-            
-            <% for(let i = 0; i < rcWork.length; i++){%>
-              <section>
-              <span id="listItem" <%= rcWork[i].completed ? 'class =  strike' : 'class =  notDone' %>><%= rcWork[i].name %> </span> 
-              <span><i class="profile fa fa-check-circle-o" aria-hidden="true"></i></span>
-              <span><i class="profile fa fa-trash-o" aria-hidden="true"></i></span>
-            </section>
-            <% } %>
-            
-          </section>
-          <section> 
-            <h1>Home</h1> 
-            
-            <% for(let i = 0; i < home.length; i++){%>
-              <section>
-              <span id="listItem" <%= home[i].completed ? 'class =  strike' : 'class =  notDone' %>><%= home[i].name %> </span> 
-              <span><i class="profile fa fa-check-circle-o" aria-hidden="true"></i></span>
-              <span><i class="profile fa fa-trash-o" aria-hidden="true"></i></span>
-            </section>
-            <% } %>
-            
-          </section>
-        
-</div>
-</section>
+            <div id="footerInfo" class="profile page-header text-center">
+
+              <a href="/logout" class="profile btn btn-default btn-sm">Logout</a>
+          </div>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+ 
+
+
+       
 
 <script src="main.js"></script>
 
